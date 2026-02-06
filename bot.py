@@ -1,9 +1,21 @@
+import os
 from telegram import Update, ReplyKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
+from telegram.ext import (
+    ApplicationBuilder,
+    CommandHandler,
+    MessageHandler,
+    ContextTypes,
+    filters
+)
 
+# ========= BOT CREDIT =========
 BOT_CREDIT = "🤖 دا بوټ د سالار خانو لخوا جوړ شوی"
 
-# ===== START =====
+# ========= TOKEN =========
+# ❗ دلته خپل توکن پیست کړه
+BOT_TOKEN = "8104728401:AAGnpTrjMUzkl6ddSEPHHtfgzjEcIhiLhps"
+
+# ========= START =========
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         ["1️⃣ ترمیکس کمانډونه"],
@@ -19,17 +31,17 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
     )
 
-# ===== TERMUX COMMANDS =====
+# ========= TERMUX COMMANDS =========
 async def termux_commands(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "📌 Termux Commands:\n\n"
         "pkg update && pkg upgrade\n"
         "pkg install python git\n"
         "pip install requests mechanize bs4 rich\n"
-        "termux-setup-storage\n"
+        "termux-setup-storage"
     )
 
-# ===== SALAR COMMAND =====
+# ========= SALAR COMMAND =========
 async def salar_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "📌 Salar Command:\n\n"
@@ -39,17 +51,17 @@ async def salar_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "python SALAR.py"
     )
 
-# ===== CONDOLENCE TEXTS =====
+# ========= CONDOLENCE =========
 async def condolence(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "🕊️ کورنا لیکنې:\n\n"
         "1️⃣ Rest in peace my brother 💔😭\n"
         "2️⃣ May your soul rest in peace 🕊️\n"
         "3️⃣ Facebook team please memorialize this account\n"
-        "4️⃣ We miss you forever 😭\n"
+        "4️⃣ We miss you forever 😭"
     )
 
-# ===== CHAT ROOM =====
+# ========= CHAT ROOM =========
 async def chat_room(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "💬 چت روم:\n\n"
@@ -59,7 +71,7 @@ async def chat_room(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "هر ځای سالار زنداباد ✌️"
     )
 
-# ===== TERMUX DOWNLOAD =====
+# ========= TERMUX DOWNLOAD =========
 async def termux_download(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "📥 Termux Download:\n\n"
@@ -67,14 +79,14 @@ async def termux_download(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "https://github.com/termux/termux-app/releases"
     )
 
-# ===== WHATSAPP =====
+# ========= WHATSAPP =========
 async def whatsapp(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "💬 WhatsApp Group:\n\n"
         "https://chat.whatsapp.com/Lk71RwA3sny9m63fIElBKV"
     )
 
-# ===== MEMORIAL FACEBOOK =====
+# ========= MEMORIAL =========
 async def memorial(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "🕊️ د مړ شوي شخص Facebook Memorial\n\n"
@@ -87,7 +99,7 @@ async def memorial(update: Update, context: ContextTypes.DEFAULT_TYPE):
         + BOT_CREDIT
     )
 
-# ===== MESSAGE HANDLER =====
+# ========= MESSAGE HANDLER =========
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
 
@@ -108,9 +120,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await update.message.reply_text("❌ مهرباني وکړئ له مینو څخه انتخاب وکړئ")
 
-# ===== MAIN =====
+# ========= MAIN =========
 def main():
-    app = ApplicationBuilder().token("8104728401:AAFRKimLYBXEvcPYT-2_SopRRF8woTY-d4s").build()
+    if BOT_TOKEN == "PASTE_YOUR_BOT_TOKEN_HERE":
+        print("❌ مهرباني وکړئ BOT TOKEN داخل کړئ")
+        return
+
+    app = ApplicationBuilder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
