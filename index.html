@@ -1,45 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Verification</title>
+  <title>Demo WebApp</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .box {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      width: 100%;
-      max-width: 350px;
-      text-align: center;
-    }
+    body { font-family: Arial; padding: 20px; }
     input, button {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-top: 10px;
     }
     button {
       background: #1877f2;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
     }
   </style>
 </head>
+
 <body>
-  <div class="box">
-    <h3>Account Verification</h3>
-    <input type="text" placeholder="Email or Phone">
-    <input type="password" placeholder="Password">
-    <button>Continue</button>
-  </div>
+
+<h3>Demo Text Send</h3>
+
+<input id="text1" placeholder="متن ولیکه">
+<input id="text2" placeholder="بل متن ولیکه">
+
+<button onclick="sendData()">Continue</button>
+
+<script>
+function sendData() {
+  const t1 = document.getElementById("text1").value;
+  const t2 = document.getElementById("text2").value;
+
+  Telegram.WebApp.sendData(JSON.stringify({
+    field1: t1,
+    field2: t2
+  }));
+}
+</script>
+
 </body>
 </html>
