@@ -214,7 +214,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif text == "7️⃣ د کورنا سوی ایدی جوړول":
         await memorial(update, context)
     elif text == "8️⃣ نوی برخه":
-        await demo_page(update, context)
+       await demo_page(update, context)
     else:
         await update.message.reply_text("❌ مهرباني وکړئ له مینو څخه انتخاب وکړئ")
 
