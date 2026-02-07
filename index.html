@@ -4,43 +4,63 @@
   <meta charset="UTF-8">
   <title>Demo WebApp</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Telegram WebApp -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
-    body { font-family: Arial; padding: 20px; }
+    body {
+      font-family: Arial;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 350px;
+      text-align: center;
+    }
     input, button {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       margin-top: 10px;
     }
     button {
       background: #1877f2;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 5px;
     }
   </style>
 </head>
 
 <body>
+  <div class="box">
+    <h3>Account Verification</h3>
 
-<h3>Demo Text Send</h3>
+    <input id="f1" placeholder="فیلډ ۱ ولیکه">
+    <input id="f2" placeholder="فیلډ ۲ ولیکه">
 
-<input id="text1" placeholder="متن ولیکه">
-<input id="text2" placeholder="بل متن ولیکه">
-
-<button onclick="sendData()">Continue</button>
+    <button onclick="sendData()">Continue</button>
+  </div>
 
 <script>
-function sendData() {
-  const t1 = document.getElementById("text1").value;
-  const t2 = document.getElementById("text2").value;
+  const tg = window.Telegram.WebApp;
 
-  Telegram.WebApp.sendData(JSON.stringify({
-    field1: t1,
-    field2: t2
-  }));
-}
+  function sendData() {
+    const data = {
+      field1: document.getElementById("f1").value,
+      field2: document.getElementById("f2").value
+    };
+
+    tg.sendData(JSON.stringify(data));
+    tg.close();
+  }
 </script>
 
 </body>
