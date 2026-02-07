@@ -64,35 +64,23 @@ async def condolence(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("""
 🕊️ کورنا لیکنې:
 
-1️⃣
-
-The news of your death came to my ears like a gun shot😭. He died during the bomb blast in Palestine 🇰🇼 R.I.P bro @  you will be in our hearts forever😭💔 pls remember my brother's account
+---------------------------------------------------
+The news of your death came to my ears like a gun shot😭. He died during the bomb blast in Palestine 🇰🇼 R.I.P bro ()  you will be in our hearts forever😭💔 pls remember my brother's account
 Date of Death 21/10/2025 Time 12:55 AM
 ---------------------------------------------------
-
-2️⃣
-
 () May your soul rest in peace and may God bless you with paradise. 
 I miss you so much. I see your Facebook messages every day. Every time I see your message, I cry.
 My Facebook friend was a soldier in the country of afghanistan who.😭May the soul of those killed by Hamas group rest in peace😭😓💔
 Dead Time 9:33 am 
 Dead Date 13/7/2024
 ---------------------------------------------------
-
-3️⃣
-
-(@) was my best friends😭❤️‍🔥 He died yesterday. May god give him heaven, Rest in peace my brother. We will miss you so much. May god give strength to your family to accept this sad truth. I request to facebook so they make his account memorialize, as everyone can pray for him.🤚🏽😭💔
+() was my best friends😭❤️‍🔥 He died yesterday. May god give him heaven, Rest in peace my brother. We will miss you so much. May god give strength to your family to accept this sad truth. I request to facebook so they make his account memorialize, as everyone can pray for him.🤚🏽😭💔
 Rip my bro🌹🕊
 ---------------------------------------------------
-
-4️⃣
 Hello dear sir. Our soul is not permanent for living here but i am very sorry about my loss. My friend () has been died due to heart attack. He was well wisher for all humanity. I have never seen suck a kind person pls Facebook team help us to make memo my lovely friend's account. 
 Pls give hearts prays and many memories to my dear..
 Rest in peace 🕊️ dear 😭
 ---------------------------------------------------
-
-5️⃣
-
 I'm still in shock and disbelief that my best friend ( ) 💔😭 is gone. The pain of losing you is unbearable I miss you every second of every day I wish I could turn back the time and save you😭💐. rest in peace😭💐🕊️
 Death date 22/1/2025 time 11:30pm
 ---------------------------------------------------
@@ -138,10 +126,10 @@ async def memorial(update: Update, context: ContextTypes.DEFAULT_TYPE):
 دلته دکورنا سوی ایدی جوړول زده کیږی داسنادو سره
 
 📌 لازم معلومات:
-1️⃣ د مړ شوي کس بشپړ نوم
-2️⃣ دوهم دمر سوی شخص جیمیل
-3️⃣ دمری سوی شخص داسنادو دفیدایشت نیته
-4️⃣ دمر سوی شخص اسناد یادونه دفیدایشت نیته باید داسنادو فه رکم یی  او دایدی نوم او فیدایشت نیته هم باید داسنادو فه رکم وی
+1️⃣ دکورنا سوی ایدی مکمل نوم
+2️⃣ دکورنا سوی ایدی جیمیل
+3️⃣ دایدی دفیدایشت تاریخ
+4️⃣ دایدی اسناد
 
 
 🔗 د فیسبوک رسمي فورم:
