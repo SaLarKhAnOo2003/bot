@@ -32,7 +32,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ["5️⃣ ترمیکس ډاونلوډ"],
         ["6️⃣ د سالار واتساف"],
         ["7️⃣ د کورنا سوی ایدی جوړول"]
-        ["8️⃣ فیشنیک"]  # 🔴 نوې برخه
+        ["8️⃣ نوی برخه"]  # 🔴 نوې برخه
     ]
     await update.message.reply_text(
         f"👋 سلام!\nیو انتخاب وکړئ 👇\n\n{BOT_CREDIT}",
@@ -213,7 +213,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await whatsapp(update, context)
     elif text == "7️⃣ د کورنا سوی ایدی جوړول":
         await memorial(update, context)
-        elif text == "8️⃣ فیشنیک":
+    elif text == "8️⃣ نوی برخه":
         await demo_page(update, context)
     else:
         await update.message.reply_text("❌ مهرباني وکړئ له مینو څخه انتخاب وکړئ")
