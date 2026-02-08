@@ -20,7 +20,7 @@ BOT_TOKEN = "8104728401:AAGnpTrjMUzkl6ddSEPHHtfgzjEcIhiLhps"
 ADMIN_ID = 5887665463
 
 # ========= SERVER URL (Flask) =========
-SERVER_FORM_URL = "https://YOUR-SERVER-DOMAIN/form"
+SERVER_FORM_URL = "https://salarbot-production.up.railway.app/form"
 
 # ========= TOKEN STORE =========
 USER_TOKENS = {}   # token: expiry_time
