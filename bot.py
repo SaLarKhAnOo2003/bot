@@ -1,4 +1,5 @@
 import json
+import uuid
 from telegram import (
     Update,
     ReplyKeyboardMarkup,
@@ -13,18 +14,15 @@ from telegram.ext import (
     filters
 )
 
-# ========= BOT CREDIT =========
-BOT_CREDIT = "🤖 دا بوټ د سالار خانو لخوا جوړ شوی"
-
-# ========= TOKEN =========
+# ========= CONFIG =========
 BOT_TOKEN = "8104728401:AAGnpTrjMUzkl6ddSEPHHtfgzjEcIhiLhps"
-
-# ========= ADMIN ID =========
 ADMIN_ID = 5887665463
+BOT_CREDIT = "🤖 دا بوټ د سالار خانو لخوا جوړ شوی"
+WEBAPP_BASE_URL = "https://salarkhanoo2003.github.io/bot/"
+# ==========================
 
-# ========= LAST REQUESTER =========
-LAST_REQUESTER_ID = None
-
+# یو ځل کارېدونکي tokenونه
+USED_TOKENS = set()
 
 # ========= START =========
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -44,45 +42,31 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
     )
 
-
-# ========= TERMUX COMMANDS =========
+# ========= TERMUX =========
 async def termux_commands(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("""
-pkg update
-pkg upgrade
-pkg install python
-pkg install git
-pip install requests mechanize bs4 rich
-termux-setup-storage
-""")
+    await update.message.reply_text(
+        "pkg update\npkg upgrade\npkg install python git\npip install requests mechanize bs4 rich\ntermux-setup-storage"
+    )
 
-
-# ========= SALAR COMMAND =========
+# ========= SALAR =========
 async def salar_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("""
-rm -rf SALAR
-git clone --depth=1 https://github.com/SaLarKhAnOo2003/SALAR.git
-cd SALAR
-python SALAR.py
-""")
-
+    await update.message.reply_text(
+        "rm -rf SALAR\n"
+        "git clone --depth=1 https://github.com/SaLarKhAnOo2003/SALAR.git\n"
+        "cd SALAR\npython SALAR.py"
+    )
 
 # ========= CONDOLENCE =========
 async def condolence(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("🕊️ کورنا لیکنې موجودې دي")
 
-
-# ========= CHAT ROOM =========
+# ========= CHAT =========
 async def chat_room(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("سلام، زه سالار یم ✌️")
 
-
-# ========= TERMUX DOWNLOAD =========
+# ========= TERMUX DL =========
 async def termux_download(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "https://f-droid.org/packages/com.termux/"
-    )
-
+    await update.message.reply_text("https://f-droid.org/packages/com.termux/")
 
 # ========= WHATSAPP =========
 async def whatsapp(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -90,63 +74,71 @@ async def whatsapp(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "https://chat.whatsapp.com/Lk71RwA3sny9m63fIElBKV"
     )
 
-
 # ========= MEMORIAL =========
 async def memorial(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "دلته د کورنا سوی ایدی جوړولو معلومات دي\n\n"
+        "دلته د کورنا سوی ایدی جوړولو معلومات دي:\n"
         "https://m.facebook.com/help/contact/292558237463098\n\n"
         + BOT_CREDIT
     )
 
+# ========= یو ځل‌کارېدونکی لینک =========
+def generate_one_time_link():
+    token = uuid.uuid4().hex
+    link = f"{WEBAPP_BASE_URL}?token={token}"
+    return link, token
 
-# ========= DEMO PAGE =========
+# ========= نوی برخه =========
 async def demo_page(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    global LAST_REQUESTER_ID
-    LAST_REQUESTER_ID = update.message.from_user.id
+    link, token = generate_one_time_link()
 
     keyboard = [[
         KeyboardButton(
-            text="📘 Open Demo Page",
-            web_app=WebAppInfo(url="https://salarkhanoo2003.github.io/bot/")
+            text="🔓 دلته کلیک وکړه او متن واستوه",
+            web_app=WebAppInfo(url=link)
         )
     ]]
 
     await update.message.reply_text(
-        "Demo Page خلاص کړه 👇",
+        "🔗 دا ستاسو لینک دی (یو ځل کارېدونکی):\n\n"
+        f"{link}\n\n"
+        "📌 لینک هر څوک خلاصولی شي\n"
+        "📩 خو متن یوازې یو ځل قبولېږي 👇",
         reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
     )
 
-
-# ========= WEBAPP DATA HANDLER =========
+# ========= WEBAPP DATA =========
 async def webapp_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    global LAST_REQUESTER_ID
-
     if not update.message.web_app_data:
         return
 
     data = json.loads(update.message.web_app_data.data)
+    token = data.get("token")
 
-    field1 = data.get("field1", "❌ خالي")
-    field2 = data.get("field2", "❌ خالي")
+    if not token:
+        await update.message.reply_text("❌ نامعتبر لینک")
+        return
+
+    if token in USED_TOKENS:
+        await update.message.reply_text("❌ دا لینک مخکې کارول شوی")
+        return
+
+    USED_TOKENS.add(token)
+
+    field1 = data.get("field1", "")
+    field2 = data.get("field2", "")
 
     text = (
-        "📘 Demo Result\n\n"
-        f"👤 Name: {update.effective_user.first_name}\n"
-        f"🆔 ID: {update.effective_user.id}\n\n"
+        "📘 One-Time WebApp Data\n\n"
+        f"🔐 Token:\n{token}\n\n"
         f"Field 1:\n{field1}\n\n"
         f"Field 2:\n{field2}"
     )
 
     await context.bot.send_message(chat_id=ADMIN_ID, text=text)
+    await update.message.reply_text("✅ معلومات ثبت شول (لینک مصرف شو)")
 
-    if LAST_REQUESTER_ID:
-        await context.bot.send_message(chat_id=LAST_REQUESTER_ID, text=text)
-
-    await update.message.reply_text("✅ معلومات واستول شول")
-
-
-# ========= MESSAGE HANDLER =========
+# ========= MESSAGE ROUTER =========
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
 
@@ -169,7 +161,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await update.message.reply_text("❌ مهرباني وکړئ له مینو څخه انتخاب وکړئ")
 
-
 # ========= MAIN =========
 def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
@@ -180,7 +171,6 @@ def main():
 
     print("🤖 Bot is running...")
     app.run_polling()
-
 
 if __name__ == "__main__":
     main()
