@@ -10,14 +10,20 @@ from telegram.ext import (
     filters
 )
 
-# ========= BOT INFO =========
-BOT_TOKEN = "8104728401:AAGnpTrjMUzkl6ddSEPHHtfgzjEcIhiLhps"
-ADMIN_ID = 5887665463
+# ========= BOT CREDIT =========
 BOT_CREDIT = "🤖 دا بوټ د سالار خانو لخوا جوړ شوی"
-WEBAPP_URL = "https://salarkhanoo2003.github.io/bot/index.html"
 
-# ========= LINK STORAGE =========
-USER_LINKS = {}  # token: expiry_time
+# ========= TOKEN =========
+BOT_TOKEN = "8104728401:AAGnpTrjMUzkl6ddSEPHHtfgzjEcIhiLhps"
+
+# ========= ADMIN ID =========
+ADMIN_ID = 5887665463
+
+# ========= SERVER URL (Flask) =========
+SERVER_FORM_URL = "https://YOUR-SERVER-DOMAIN/form"
+
+# ========= TOKEN STORE =========
+USER_TOKENS = {}   # token: expiry_time
 
 # ========= START =========
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -31,55 +37,78 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ["7️⃣ د کورنا سوی ایدی جوړول"],
         ["8️⃣ نوی برخه"]
     ]
-
     await update.message.reply_text(
         f"👋 سلام!\nیو انتخاب وکړئ 👇\n\n{BOT_CREDIT}",
         reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
     )
 
-# ========= MENU FUNCTIONS =========
+# ========= TERMUX COMMANDS =========
 async def termux_commands(update, context):
-    await update.message.reply_text("""📌 Termux Commands:
+    await update.message.reply_text("""
+📌 Termux Commands:
+
 pkg update
 pkg upgrade
 pkg install python
 pkg install git
-pip install requests mechanize bs4 rich
+pip install requests
+pip install mechanize
+pip install bs4 futures
+pip install rich
 termux-setup-storage
+pip install pycurl
 """)
 
+# ========= SALAR COMMAND =========
 async def salar_command(update, context):
-    await update.message.reply_text("""📌 Salar Command:
+    await update.message.reply_text("""
+📌 Salar Command:
+
 rm -rf SALAR
-git clone https://github.com/SaLarKhAnOo2003/SALAR.git
+git clone --depth=1 https://github.com/SaLarKhAnOo2003/SALAR.git
 cd SALAR
 python SALAR.py
 """)
 
+# ========= CONDOLENCE =========
 async def condolence(update, context):
-    await update.message.reply_text("🕊️ کورنا لیکنې\n\n(ستا هماغه پخوانی متن دلته محفوظ دی)")
+    await update.message.reply_text("🕊️ کورنا لیکنې موجودې دي")
 
+# ========= CHAT ROOM =========
 async def chat_room(update, context):
     await update.message.reply_text(
-        "💬 چت روم:\n"
+        "💬 چت روم:\n\n"
         "سلام زه سالار خانو یم، ستاسو نوم څه دی؟\n"
-        "زه کندهاری یم، ته د کوم ځای یې؟"
+        "زه هر وخت قهرمان یم 🇦🇫\n"
+        "زه کندهاری یم، ته د کوم ځای یې؟\n"
+        "هر ځای سالار زنداباد ✌️"
     )
 
+# ========= TERMUX DOWNLOAD =========
 async def termux_download(update, context):
-    await update.message.reply_text("""📥 Termux Download:
+    await update.message.reply_text("""
+📥 Termux Download Links:
+
 https://f-droid.org/packages/com.termux/
 https://github.com/termux/termux-app/releases
+https://apkpure.com/termux/com.termux
+https://apkcombo.com/termux/com.termux/
+https://uptodown.com/android/termux
 """)
 
+# ========= WHATSAPP =========
 async def whatsapp(update, context):
     await update.message.reply_text(
-        "💬 WhatsApp Group:\nhttps://chat.whatsapp.com/Lk71RwA3sny9m63fIElBKV"
+        "💬 WhatsApp Group:\n\n"
+        "https://chat.whatsapp.com/Lk71RwA3sny9m63fIElBKV"
     )
 
+# ========= MEMORIAL =========
 async def memorial(update, context):
-    await update.message.reply_text("""📌 د کورنا سوی ایدی جوړول
-لازم معلومات:
+    await update.message.reply_text("""
+دلته دکورنا سوی ایدی جوړول زده کیږی داسنادو سره
+
+📌 لازم معلومات:
 1️⃣ مکمل نوم
 2️⃣ جیمیل
 3️⃣ د پیدایښت تاریخ
@@ -89,49 +118,23 @@ async def memorial(update, context):
 https://m.facebook.com/help/contact/292558237463098
 """ + BOT_CREDIT)
 
-# ========= NEW PART (LINK SYSTEM) =========
-async def new_part(update, context):
+# =========================
+# 🔴 نوی برخه (اصلاح شوی)
+# =========================
+async def demo_page(update: Update, context: ContextTypes.DEFAULT_TYPE):
     token = uuid.uuid4().hex
-    USER_LINKS[token] = time.time() + 86400  # 24 hours
+    USER_TOKENS[token] = time.time() + 86400   # 24 ساعته
 
-    link = f"{WEBAPP_URL}?token={token}"
+    link = f"{SERVER_FORM_URL}?token={token}"
 
     await update.message.reply_text(
-        "🔗 دا ستا شخصي لینک دی (۲۴ ساعته معتبر):\n\n"
+        "🔗 دا ستاسو شخصي لینک دی (۲۴ ساعته معتبر):\n\n"
         f"{link}\n\n"
-        "لینک کاپي کړه، براوزر کې یې خلاص کړه او فورم ډک کړه."
+        "هر براوزر کې یې خلاص کړه او فورم ډک کړه.\n"
+        "متن به مستقیم بوت ته راشي ✅"
     )
 
-# ========= WEBAPP DATA =========
-async def webapp_handler(update, context):
-    try:
-        data = json.loads(update.message.web_app_data.data)
-    except:
-        return
-
-    token = data.get("token")
-    name = data.get("name")
-    message = data.get("message")
-
-    if token not in USER_LINKS:
-        await update.message.reply_text("❌ لینک ناسم دی")
-        return
-
-    if time.time() > USER_LINKS[token]:
-        del USER_LINKS[token]
-        await update.message.reply_text("❌ لینک ختم شوی")
-        return
-
-    del USER_LINKS[token]
-
-    await context.bot.send_message(
-        ADMIN_ID,
-        f"📩 New Data\n\n👤 Name: {name}\n📝 Message:\n{message}"
-    )
-
-    await update.message.reply_text("✅ معلومات واستول شول")
-
-# ========= TEXT HANDLER =========
+# ========= MESSAGE HANDLER =========
 async def handle_message(update, context):
     text = update.message.text
 
@@ -150,19 +153,16 @@ async def handle_message(update, context):
     elif text == "7️⃣ د کورنا سوی ایدی جوړول":
         await memorial(update, context)
     elif text == "8️⃣ نوی برخه":
-        await new_part(update, context)
+        await demo_page(update, context)
     else:
         await update.message.reply_text("❌ مهرباني وکړئ له مینو څخه انتخاب وکړئ")
 
 # ========= MAIN =========
 def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
-
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, webapp_handler))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-
-    print("Bot is running...")
+    print("🤖 Bot is running...")
     app.run_polling()
 
 if __name__ == "__main__":
