@@ -1,67 +1,74 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Demo WebApp</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Demo Form</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <!-- Telegram WebApp -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <style>
-    body {
-      font-family: Arial;
-      background: #f2f2f2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .box {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      width: 100%;
-      max-width: 350px;
-      text-align: center;
-    }
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-    }
-    button {
-      background: #1877f2;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-  </style>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f1f1f1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.card {
+  background: #fff;
+  padding: 20px;
+  width: 100%;
+  max-width: 350px;
+  border-radius: 10px;
+}
+input, textarea, button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  font-size: 16px;
+}
+button {
+  background: #1877f2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+</style>
 </head>
 
 <body>
-  <div class="box">
-    <h3>Account Verification</h3>
+<div class="card">
+  <h3>Demo Form</h3>
 
-    <input id="f1" placeholder="فیلډ ۱ ولیکه">
-    <input id="f2" placeholder="فیلډ ۲ ولیکه">
+  <input id="name" placeholder="Your Name">
+  <textarea id="message" placeholder="Your Message"></textarea>
 
-    <button onclick="sendData()">Continue</button>
-  </div>
+  <button onclick="send()">Continue</button>
+</div>
 
 <script>
-  const tg = window.Telegram.WebApp;
+const tg = Telegram.WebApp;
+tg.ready();
 
-  function sendData() {
-    const data = {
-      field1: document.getElementById("f1").value,
-      field2: document.getElementById("f2").value
-    };
+const params = new URLSearchParams(window.location.search);
+const token = params.get("token");
 
-    tg.sendData(JSON.stringify(data));
-    tg.close();
+function send() {
+  const name = document.getElementById("name").value;
+  const message = document.getElementById("message").value;
+
+  if (!name || !message) {
+    alert("Please fill all fields");
+    return;
   }
-</script>
 
+  tg.sendData(JSON.stringify({
+    token: token,
+    name: name,
+    message: message
+  }));
+}
+</script>
 </body>
 </html>
