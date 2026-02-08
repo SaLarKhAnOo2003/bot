@@ -1,7 +1,5 @@
 import json
-import uuid
-import time
-from telegram import Update, ReplyKeyboardMarkup
+from telegram import Update, ReplyKeyboardMarkup, WebAppInfo
 from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
@@ -19,11 +17,9 @@ BOT_TOKEN = "8104728401:AAGnpTrjMUzkl6ddSEPHHtfgzjEcIhiLhps"
 # ========= ADMIN ID =========
 ADMIN_ID = 5887665463
 
-# ========= SERVER URL (Flask) =========
-SERVER_FORM_URL = "https://salarbot-production.up.railway.app/form"
+# ========= LAST REQUESTER =========
+LAST_REQUESTER_ID = None
 
-# ========= TOKEN STORE =========
-USER_TOKENS = {}   # token: expiry_time
 
 # ========= START =========
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -37,105 +33,94 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ["7️⃣ د کورنا سوی ایدی جوړول"],
         ["8️⃣ نوی برخه"]
     ]
+
     await update.message.reply_text(
         f"👋 سلام!\nیو انتخاب وکړئ 👇\n\n{BOT_CREDIT}",
         reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
     )
 
-# ========= TERMUX COMMANDS =========
-async def termux_commands(update, context):
-    await update.message.reply_text("""
-📌 Termux Commands:
 
-pkg update
-pkg upgrade
-pkg install python
-pkg install git
-pip install requests
-pip install mechanize
-pip install bs4 futures
-pip install rich
-termux-setup-storage
-pip install pycurl
-""")
-
-# ========= SALAR COMMAND =========
-async def salar_command(update, context):
-    await update.message.reply_text("""
-📌 Salar Command:
-
-rm -rf SALAR
-git clone --depth=1 https://github.com/SaLarKhAnOo2003/SALAR.git
-cd SALAR
-python SALAR.py
-""")
-
-# ========= CONDOLENCE =========
-async def condolence(update, context):
-    await update.message.reply_text("🕊️ کورنا لیکنې موجودې دي")
-
-# ========= CHAT ROOM =========
-async def chat_room(update, context):
+# ========= TERMUX =========
+async def termux_commands(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "💬 چت روم:\n\n"
-        "سلام زه سالار خانو یم، ستاسو نوم څه دی؟\n"
-        "زه هر وخت قهرمان یم 🇦🇫\n"
-        "زه کندهاری یم، ته د کوم ځای یې؟\n"
-        "هر ځای سالار زنداباد ✌️"
+        "pkg update\npkg upgrade\npkg install python\npkg install git\n"
+        "pip install requests\npip install mechanize\npip install bs4 futures\n"
+        "pip install rich\ntermux-setup-storage\npip install pycurl"
     )
 
-# ========= TERMUX DOWNLOAD =========
-async def termux_download(update, context):
-    await update.message.reply_text("""
-📥 Termux Download Links:
 
-https://f-droid.org/packages/com.termux/
-https://github.com/termux/termux-app/releases
-https://apkpure.com/termux/com.termux
-https://apkcombo.com/termux/com.termux/
-https://uptodown.com/android/termux
-""")
-
-# ========= WHATSAPP =========
-async def whatsapp(update, context):
+async def salar_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "💬 WhatsApp Group:\n\n"
+        "rm -rf SALAR\n"
+        "git clone --depth=1 https://github.com/SaLarKhAnOo2003/SALAR.git\n"
+        "cd SALAR\npython SALAR.py"
+    )
+
+
+async def condolence(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("🕊️ کورنا لیکنې موجودې دي...")
+
+
+async def chat_room(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("💬 سلام! زه سالار خانو یم 👋")
+
+
+async def termux_download(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "https://f-droid.org/packages/com.termux/\n"
+        "https://github.com/termux/termux-app/releases"
+    )
+
+
+async def whatsapp(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
         "https://chat.whatsapp.com/Lk71RwA3sny9m63fIElBKV"
     )
 
-# ========= MEMORIAL =========
-async def memorial(update, context):
-    await update.message.reply_text("""
-دلته دکورنا سوی ایدی جوړول زده کیږی داسنادو سره
 
-📌 لازم معلومات:
-1️⃣ مکمل نوم
-2️⃣ جیمیل
-3️⃣ د پیدایښت تاریخ
-4️⃣ اسناد
-
-🔗 رسمي فورم:
-https://m.facebook.com/help/contact/292558237463098
-""" + BOT_CREDIT)
-
-# =========================
-# 🔴 نوی برخه (اصلاح شوی)
-# =========================
-async def demo_page(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    token = uuid.uuid4().hex
-    USER_TOKENS[token] = time.time() + 86400   # 24 ساعته
-
-    link = f"{SERVER_FORM_URL}?token={token}"
-
+async def memorial(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "🔗 دا ستاسو شخصي لینک دی (۲۴ ساعته معتبر):\n\n"
-        f"{link}\n\n"
-        "هر براوزر کې یې خلاص کړه او فورم ډک کړه.\n"
-        "متن به مستقیم بوت ته راشي ✅"
+        "🔗 https://m.facebook.com/help/contact/292558237463098\n\n" + BOT_CREDIT
     )
 
+
+# =========================
+# 🔴 NEW PART – REAL FORM LINK
+# =========================
+async def demo_page(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global LAST_REQUESTER_ID
+    LAST_REQUESTER_ID = update.message.from_user.id
+
+    keyboard = [[{
+        "text": "📘 فورم خلاص کړه",
+        "web_app": WebAppInfo(
+            url="https://salarbot-production.up.railway.app/form"
+        )
+    }]]
+
+    await update.message.reply_text(
+        "دا ستا شخصي فورم دی (۲۴ ساعته معتبر) 👇",
+        reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+    )
+
+
+# =========================
+# 🔴 DATA FROM FORM
+# =========================
+async def webapp_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    data = json.loads(update.message.web_app_data.data)
+
+    name = data.get("name", "")
+    message = data.get("message", "")
+
+    text = f"📩 New Form Data\n\n👤 {name}\n📝 {message}"
+
+    await context.bot.send_message(chat_id=ADMIN_ID, text=text)
+    await update.message.reply_text("✅ معلومات واستول شول")
+
+
 # ========= MESSAGE HANDLER =========
-async def handle_message(update, context):
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
 
     if text == "1️⃣ ترمیکس کمانډونه":
@@ -155,15 +140,20 @@ async def handle_message(update, context):
     elif text == "8️⃣ نوی برخه":
         await demo_page(update, context)
     else:
-        await update.message.reply_text("❌ مهرباني وکړئ له مینو څخه انتخاب وکړئ")
+        await update.message.reply_text("❌ له مینو انتخاب وکړه")
+
 
 # ========= MAIN =========
 def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
+
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, webapp_handler))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    print("🤖 Bot is running...")
+
+    print("🤖 Bot Running...")
     app.run_polling()
+
 
 if __name__ == "__main__":
     main()
