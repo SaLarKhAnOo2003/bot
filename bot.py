@@ -13,14 +13,20 @@ from telegram.ext import (
     filters
 )
 
-# ================= CONFIG =================
-BOT_TOKEN = "8104728401:AAGnpTrjMUzkl6ddSEPHHtfgzjEcIhiLhps"
-ADMIN_ID = 5887665463   # خپل Telegram ID
-WEBAPP_URL = "https://salarkhanoo2003.github.io/bot/"
+# ========= BOT CREDIT =========
 BOT_CREDIT = "🤖 دا بوټ د سالار خانو لخوا جوړ شوی"
-# =========================================
 
-# START
+# ========= TOKEN =========
+BOT_TOKEN = "8104728401:AAGnpTrjMUzkl6ddSEPHHtfgzjEcIhiLhps"
+
+# ========= ADMIN ID =========
+ADMIN_ID = 5887665463
+
+# ========= LAST REQUESTER =========
+LAST_REQUESTER_ID = None
+
+
+# ========= START =========
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         ["1️⃣ ترمیکس کمانډونه"],
@@ -30,15 +36,16 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ["5️⃣ ترمیکس ډاونلوډ"],
         ["6️⃣ د سالار واتساف"],
         ["7️⃣ د کورنا سوی ایدی جوړول"],
-        [KeyboardButton("8️⃣ نوی برخه", web_app=WebAppInfo(url=WEBAPP_URL))]
+        ["8️⃣ نوی برخه"]
     ]
 
     await update.message.reply_text(
-        f"سلام 👋\nیو انتخاب وکړئ 👇\n\n{BOT_CREDIT}",
+        f"👋 سلام!\nیو انتخاب وکړئ 👇\n\n{BOT_CREDIT}",
         reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
     )
 
-# TERMUX COMMANDS
+
+# ========= TERMUX COMMANDS =========
 async def termux_commands(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("""
 pkg update
@@ -49,63 +56,97 @@ pip install requests mechanize bs4 rich
 termux-setup-storage
 """)
 
-# SALAR COMMAND
+
+# ========= SALAR COMMAND =========
 async def salar_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("""
 rm -rf SALAR
-git clone https://github.com/SaLarKhAnOo2003/SALAR.git
+git clone --depth=1 https://github.com/SaLarKhAnOo2003/SALAR.git
 cd SALAR
 python SALAR.py
 """)
 
-# CONDOLENCE
+
+# ========= CONDOLENCE =========
 async def condolence(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("🕊️ کورنا لیکنې موجودې دي")
 
-# CHAT ROOM
+
+# ========= CHAT ROOM =========
 async def chat_room(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("سلام، زه سالار یم ✌️")
 
-# TERMUX DOWNLOAD
+
+# ========= TERMUX DOWNLOAD =========
 async def termux_download(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "https://f-droid.org/packages/com.termux/"
     )
 
-# WHATSAPP
+
+# ========= WHATSAPP =========
 async def whatsapp(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "https://chat.whatsapp.com/Lk71RwA3sny9m63fIElBKV"
     )
 
-# MEMORIAL
+
+# ========= MEMORIAL =========
 async def memorial(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "دلته د کورنا سوی ایدی جوړولو معلومات دي\n\n"
-        "https://m.facebook.com/help/contact/292558237463098"
+        "https://m.facebook.com/help/contact/292558237463098\n\n"
+        + BOT_CREDIT
     )
 
-# RECEIVE WEBAPP DATA
+
+# ========= DEMO PAGE =========
+async def demo_page(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global LAST_REQUESTER_ID
+    LAST_REQUESTER_ID = update.message.from_user.id
+
+    keyboard = [[
+        KeyboardButton(
+            text="📘 Open Demo Page",
+            web_app=WebAppInfo(url="https://salarkhanoo2003.github.io/bot/")
+        )
+    ]]
+
+    await update.message.reply_text(
+        "Demo Page خلاص کړه 👇",
+        reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+    )
+
+
+# ========= WEBAPP DATA HANDLER =========
 async def webapp_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    data = json.loads(update.effective_message.web_app_data.data)
+    global LAST_REQUESTER_ID
 
-    demo1 = data.get("demo1", "")
-    demo2 = data.get("demo2", "")
+    if not update.message.web_app_data:
+        return
 
-    sender = update.effective_user
+    data = json.loads(update.message.web_app_data.data)
+
+    field1 = data.get("field1", "❌ خالي")
+    field2 = data.get("field2", "❌ خالي")
 
     text = (
         "📘 Demo Result\n\n"
-        f"👤 Name: {sender.first_name}\n"
-        f"🆔 ID: {sender.id}\n\n"
-        f"Demo 1:\n{demo1}\n\n"
-        f"Demo 2:\n{demo2}"
+        f"👤 Name: {update.effective_user.first_name}\n"
+        f"🆔 ID: {update.effective_user.id}\n\n"
+        f"Field 1:\n{field1}\n\n"
+        f"Field 2:\n{field2}"
     )
 
     await context.bot.send_message(chat_id=ADMIN_ID, text=text)
-    await update.message.reply_text("✅ متنونه واستول شول")
 
-# MESSAGE HANDLER
+    if LAST_REQUESTER_ID:
+        await context.bot.send_message(chat_id=LAST_REQUESTER_ID, text=text)
+
+    await update.message.reply_text("✅ معلومات واستول شول")
+
+
+# ========= MESSAGE HANDLER =========
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
 
@@ -123,10 +164,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await whatsapp(update, context)
     elif text == "7️⃣ د کورنا سوی ایدی جوړول":
         await memorial(update, context)
+    elif text == "8️⃣ نوی برخه":
+        await demo_page(update, context)
     else:
-        await update.message.reply_text("❌ له مینو انتخاب وکړه")
+        await update.message.reply_text("❌ مهرباني وکړئ له مینو څخه انتخاب وکړئ")
 
-# MAIN
+
+# ========= MAIN =========
 def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
@@ -134,8 +178,9 @@ def main():
     app.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, webapp_handler))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-    print("Bot is running...")
+    print("🤖 Bot is running...")
     app.run_polling()
+
 
 if __name__ == "__main__":
     main()
