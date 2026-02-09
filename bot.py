@@ -96,13 +96,25 @@ Death date 22/1/2025 time 11:30pm
 
 # ========= CHAT ROOM =========
 async def chat_room(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "💬 چت روم:\n\n"
-        "سلام زه سالار خانو یم، ستاسو نوم څه دی؟\n"
-        "زه هر وخت قهرمان یم 🇦🇫\n"
-        "زه کندهاری یم، ته د کوم ځای یې؟\n"
-        "هر ځای سالار زنداباد ✌️"
-    )
+    await update.message.reply_text("""
+اول باید تاسو لس کورپان جوړ کړی 
+دوهم هر کورپ ته باید داعش عکس ورکی
+کله چی کورپان جوړسوه هغه شخص اډمین کړی ورسته کورپانو کی شل عکسونه پورته کړی هر کورپ کی لس عکسونه دماشومانو چی دا ډیر مهم دی لس عکسونه د داعشانو ورسته باید ریفوت وهی 
+یادونه
+لس ایډیانی باید ستاسو دا اډ وی کورپانو کی
+
+دهغه شخص نیک نیم
+Ich, der Anführer von ISIS‼️🔪🗡💪🏿(دهغه نوم)
+دا نیک نیم هم باید شخسی ورکی هم ټولو کورپانو کی
+ورسته دا ټوله چت روم کورپانو کی پورته کی
+
+Ich, der Anführer von ISIS‼️🔪🗡💪🏿(دهغه نوم), sage dir, nachdem du jedes Kind gesehen hast, wo immer‼️🔪🗡💪🏿 es war, töte es auf die gleiche Weise, dies ist mein Fluch 💪🏿🗡🔪‼️auf dir, oh Geschwätz, höre in deine Ohren und das vor dreißig Tagen (6/2/2026) Eine unserer Gruppen namens Jahani tötete 8 Kinder im Zentrum 🔪💪🏿💪🏿💪🏿‼️von Syrien, Damaskus, und dies ist eine der guten 🔪💪🏿‼️Taten unserer Gruppe, die Jahani heißt, und nach allem, 🔪🗡‼️💪🏿was Sie tun, sollte es jedes Kind und jede Person, die Sie sehen, tun werde💪🏿💪🏿‼️ bestraft Ziehe den meisten Harnstoff, das ist mein Befehl, das ist die neue Idee deines Anführers 👇🏿👇🏿
+Ich, der Anführer von ISIS‼️🔪🗡💪(دهغه نوم) sage dir, nachdem du jedes Kind gesehen hast, wo immer‼️🔪🗡💪🏿 es war, töte es auf die gleiche Weise, dies ist mein Fluch 💪🏿🗡🔪‼️auf dir, oh Geschwätz, höre in deine Ohren und das vor dreißig Tagen(6/2/2026) Eine unserer Gruppen namens Jahani tötete 8 Kinder im Zentrum 🔪💪🏿💪🏿💪🏿‼️von Syrien, Dam.
+👇🏻😋
+https://www.facebook.com/
+دلته دهغه دفیسبوک نوم
+تاریخ هم باید دهغه ورځی دا ورکم کم ورځ چی ریپوټ وهی
+""")
 
 # ========= TERMUX DOWNLOAD =========
 async def termux_download(update: Update, context: ContextTypes.DEFAULT_TYPE):
