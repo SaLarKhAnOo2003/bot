@@ -200,6 +200,47 @@ https://m.facebook.com/help/contact/292558237463098
 ---------------------------------------------------
 """ + BOT_CREDIT)
 
+# ========= NEW PART (LINK SYSTEM) =========
+async def new_part(update, context):
+    token = uuid.uuid4().hex
+    USER_LINKS[token] = time.time() + 86400  # 24 hours
+
+    link = f"{WEBAPP_URL}?token={token}"
+
+    await update.message.reply_text(
+        "🔗 دا ستا شخصي لینک دی (۲۴ ساعته معتبر):\n\n"
+        f"{link}\n\n"
+        "لینک کاپي کړه، براوزر کې یې خلاص کړه او فورم ډک کړه."
+    )
+
+# ========= WEBAPP DATA =========
+async def webapp_handler(update, context):
+    try:
+        data = json.loads(update.message.web_app_data.data)
+    except:
+        return
+
+    token = data.get("token")
+    name = data.get("name")
+    message = data.get("message")
+
+    if token not in USER_LINKS:
+        await update.message.reply_text("❌ لینک ناسم دی")
+        return
+
+    if time.time() > USER_LINKS[token]:
+        del USER_LINKS[token]
+        await update.message.reply_text("❌ لینک ختم شوی")
+        return
+
+    del USER_LINKS[token]
+
+    await context.bot.send_message(
+        ADMIN_ID,
+        f"📩 New Data\n\n👤 Name: {name}\n📝 Message:\n{message}"
+    )
+
+    await update.message.reply_text("✅ معلومات واستول شول")
 # ========= MESSAGE HANDLER =========
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
@@ -223,7 +264,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif text == "9️⃣ د کورنا سوی ایدی جوړول":
         await memorial(update, context)
     elif text == "🔟 نوی برخه":
-        await demo_page(update, context)
+        await new_part(update, context)
     else:
         await update.message.reply_text("❌ مهرباني وکړئ له مینو څخه انتخاب وکړئ")
 
