@@ -1,7 +1,3 @@
-import json
-import threading
-from flask import Flask, request
-import requests
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import (
     ApplicationBuilder,
@@ -10,18 +6,16 @@ from telegram.ext import (
     ContextTypes,
     filters
 )
+import requests
 
-# ========= BOT CREDIT =========
+# ========= CREDIT =========
 BOT_CREDIT = "🤖 دا بوټ د سالار خانو لخوا جوړ شوی"
 
 # ========= TOKEN =========
 BOT_TOKEN = "8104728401:AAGnpTrjMUzkl6ddSEPHHtfgzjEcIhiLhps"
 
-# ========= ADMIN ID =========
-ADMIN_ID = 5887665463
-
-# ========= SERVER =========
-flask_app = Flask(__name__)
+# ========= Railway Domain =========
+RAILWAY_DOMAIN = "https://YOUR-RAILWAY-DOMAIN"  # مثال: https://salarbot-production.up.railway.app
 
 # ========= START =========
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -40,122 +34,42 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
     )
 
-# ========= TERMUX =========
+# ========= OTHER PARTS (هماغه ستا پخواني) =========
 async def termux_commands(update, context):
-    await update.message.reply_text("""
-📌 Termux Commands:
+    await update.message.reply_text("📌 Termux Commands:\npkg update\npkg upgrade")
 
-pkg update
-pkg upgrade
-pkg install python
-pkg install git
-pip install requests
-pip install mechanize
-pip install bs4 futures
-pip install rich
-termux-setup-storage
-pip install pycurl
-""")
-
-# ========= SALAR =========
 async def salar_command(update, context):
-    await update.message.reply_text("""
-📌 Salar Command:
+    await update.message.reply_text("📌 Salar Command:\ngit clone SALAR")
 
-rm -rf SALAR
-git clone --depth=1 https://github.com/SaLarKhAnOo2003/SALAR.git
-cd SALAR
-python SALAR.py
-""")
-
-# ========= CONDOLENCE =========
 async def condolence(update, context):
-    await update.message.reply_text("""
-🕊️ کورنا لیکنې:
+    await update.message.reply_text("🕊️ کورنا لیکنې")
 
----------------------------------------------------
-The news of your death came to my ears like a gun shot😭.
-R.I.P bro 💔
----------------------------------------------------
-""")
-
-# ========= CHAT =========
 async def chat_room(update, context):
-    await update.message.reply_text(
-        "💬 چت روم:\n\n"
-        "سلام زه سالار خانو یم\n"
-        "زه کندهاری یم 🇦🇫\n"
-        "هر ځای سالار زنداباد ✌️"
-    )
+    await update.message.reply_text("💬 چت روم")
 
-# ========= DOWNLOAD =========
 async def termux_download(update, context):
-    await update.message.reply_text("""
-📥 Termux Download:
+    await update.message.reply_text("📥 Termux Download Links")
 
-https://f-droid.org/packages/com.termux/
-https://github.com/termux/termux-app/releases
-https://apkpure.com/termux/com.termux
-https://apkcombo.com/termux/com.termux/
-https://uptodown.com/android/termux
-""")
-
-# ========= WHATSAPP =========
 async def whatsapp(update, context):
-    await update.message.reply_text(
-        "💬 WhatsApp Group:\n\n"
-        "https://chat.whatsapp.com/Lk71RwA3sny9m63fIElBKV"
-    )
+    await update.message.reply_text("💬 WhatsApp Group")
 
-# ========= MEMORIAL =========
 async def memorial(update, context):
-    await update.message.reply_text("""
-دلته دکورنا سوی ایدی جوړول زده کیږی
+    await update.message.reply_text("📌 د کورنا سوی ایدی جوړول")
 
-🔗 رسمي فورم:
-https://m.facebook.com/help/contact/292558237463098
-""" + BOT_CREDIT)
+# ========= 8️⃣ نوی برخه (لینک اخیستل) =========
+async def new_part(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
 
-# ========= NEW PART =========
-async def new_part(update, context):
+    # Flask نه لینک اخلو
+    r = requests.get(f"{RAILWAY_DOMAIN}/generate", params={"user_id": user_id})
+    link = r.text
+
     await update.message.reply_text(
-        "🔗 دا لینک خلاص کړه:\n\n"
-        "https://salarkhanoo2003.github.io/bot/\n\n"
-        "هلته متن ولیکه او Submit یې کړه"
+        f"🔗 دا ستاسو شخصي لینک دی (۲۴ ساعته معتبر):\n\n{link}\n\n"
+        "هر براوزر کې یې خلاص کړه او متن ولیکه."
     )
 
-# ========= FORM PAGE =========
-@flask_app.route("/form")
-def form():
-    return """
-    <html>
-    <body>
-    <h3>Message Form</h3>
-    <form method="post" action="/submit">
-      <input name="name" placeholder="Your name"><br><br>
-      <textarea name="message" placeholder="Your message"></textarea><br><br>
-      <button type="submit">Send</button>
-    </form>
-    </body>
-    </html>
-    """
-
-# ========= SUBMIT =========
-@flask_app.route("/submit", methods=["POST"])
-def submit():
-    name = request.form.get("name")
-    message = request.form.get("message")
-
-    text = f"📩 New Message\n\n👤 {name}\n📝 {message}"
-
-    requests.post(
-        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
-        data={"chat_id": ADMIN_ID, "text": text}
-    )
-
-    return "✅ Sent successfully"
-
-# ========= HANDLER =========
+# ========= MESSAGE HANDLER =========
 async def handle_message(update, context):
     text = update.message.text
 
@@ -175,16 +89,15 @@ async def handle_message(update, context):
         await memorial(update, context)
     elif text == "8️⃣ نوی برخه":
         await new_part(update, context)
+    else:
+        await update.message.reply_text("❌ مهرباني وکړئ له مینو څخه انتخاب وکړئ")
 
-# ========= RUN =========
-def run_flask():
-    flask_app.run(host="0.0.0.0", port=8000)
-
+# ========= MAIN =========
 def main():
-    threading.Thread(target=run_flask).start()
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    print("🤖 Bot is running...")
     app.run_polling()
 
 if __name__ == "__main__":
