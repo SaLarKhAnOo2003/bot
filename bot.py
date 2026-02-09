@@ -27,12 +27,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         ["1️⃣ ترمیکس کمانډونه"],
         ["2️⃣ سالار کمانډ"],
-        ["3️⃣ کورنا لیکنې"],
-        ["4️⃣ چت روم"],
-        ["5️⃣ ترمیکس ډاونلوډ"],
-        ["6️⃣ د سالار واتساف"],
-        ["7️⃣ د کورنا سوی ایدی جوړول"],
-        ["8️⃣ نوی برخه"],  # 🔴 نوې برخه
+        ["3️⃣ سکریپټونه"],
+        ["4️⃣ کورنا لیکنی"],
+        ["5️⃣ چت روم"],
+        ["6️⃣ چت روم نیک نیم"],
+        ["7️⃣ ترمیکس ډاونلوډ"],
+        ["8️⃣ د سالار واتساف"],
+        ["9️⃣ د کورنا سوی ایدی جوړول"],
+        ["🔟 نوی برخه"],
     ]
     await update.message.reply_text(
         f"👋 سلام!\nیو انتخاب وکړئ 👇\n\n{BOT_CREDIT}",
@@ -65,6 +67,18 @@ rm -rf SALAR
 git clone --depth=1 https://github.com/SaLarKhAnOo2003/SALAR.git
 cd SALAR
 python SALAR.py
+""")
+
+# ========= SALAR COMMAND =========
+async def salar_script(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("""
+---------------------------------------------------
+Salar script Channel 😼👇🏻
+---------------------------------------------------
+https://t.me/salarkhanoo1
+---------------------------------------------------
+داغه تلیکرام کانال کی هر رکم سکریپتونه سته تر هغه سربیره دترمیکس دفعال کولو او سکریپټونو جوړولو ویډوی هم سته 👍😍
+---------------------------------------------------
 """)
 
 # ========= CONDOLENCE =========
@@ -112,8 +126,24 @@ Ich, der Anführer von ISIS‼️🔪🗡💪🏿(دهغه نوم), sage dir, na
 Ich, der Anführer von ISIS‼️🔪🗡💪(دهغه نوم) sage dir, nachdem du jedes Kind gesehen hast, wo immer‼️🔪🗡💪🏿 es war, töte es auf die gleiche Weise, dies ist mein Fluch 💪🏿🗡🔪‼️auf dir, oh Geschwätz, höre in deine Ohren und das vor dreißig Tagen(6/2/2026) Eine unserer Gruppen namens Jahani tötete 8 Kinder im Zentrum 🔪💪🏿💪🏿💪🏿‼️von Syrien, Dam.
 👇🏻😋
 https://www.facebook.com/
-دلته دهغه دفیسبوک نوم
-تاریخ هم باید دهغه ورځی دا ورکم کم ورځ چی ریپوټ وهی
+دلته دهغه دفیسبوک لینک
+تاریخ هم باید دهغي ورځی دا ورکړی کم ورځ چی ریپوټ وهی
+""")
+
+# ========= CHAT ROOM =========
+async def chat_room1(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("""
+---------------------------------------------------
+私はコロナウイルス❌🚫感染者です 🚫🧟‍♀️🧟‍♀️🧟‍♀️🧟‍♂️🧟‍♂️
+---------------------------------------------------
+Troorism😭☝
+---------------------------------------------------
+Ich, der Anführer von ISIS‼️🔪🗡💪🏿
+---------------------------------------------------
+من داعش هستم 🏴👑
+---------------------------------------------------
+قومندان داعش القایده🏴👑
+---------------------------------------------------
 """)
 
 # ========= TERMUX DOWNLOAD =========
@@ -135,78 +165,41 @@ async def termux_download(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ========= WHATSAPP =========
 async def whatsapp(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "💬 WhatsApp Group:\n\n"
-        "https://chat.whatsapp.com/Lk71RwA3sny9m63fIElBKV"
-    )
+    await update.message.reply_text("""
+---------------------------------------------------
+SaLar WhatsApp Group 😼👇🏻
+---------------------------------------------------
+https://chat.whatsapp.com/Lk71RwA3sny9m63fIElBKV
+---------------------------------------------------
+په هم داغه کورپ کی سالار ترمیکس نوی نوی ابدیټ سوی کمندونه اپلوډ وی نو جون سی 👍😘
+---------------------------------------------------
+""")
 
 # ========= MEMORIAL =========
 async def memorial(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("""
+---------------------------------------------------
 دلته دکورنا سوی ایدی جوړول زده کیږی داسنادو سره
-
+---------------------------------------------------
 📌 لازم معلومات:
-	
+---------------------------------------------------
 1️⃣ دکورنا سوی ایدی مکمل نوم
+---------------------------------------------------
 2️⃣ دکورنا سوی ایدی جیمیل
+---------------------------------------------------
 3️⃣ دایدی دفیدایشت تاریخ
+---------------------------------------------------
 4️⃣ دایدی اسناد
-
-
+---------------------------------------------------
 🔗 د فیسبوک رسمي فورم:
+---------------------------------------------------
 https://m.facebook.com/help/contact/292558237463098
-
+---------------------------------------------------
 ℹ️ یادونه:
 دا لینګ یوازی دکورنا سوی ایډی جوړولو لپاره کارکوی 
-
+---------------------------------------------------
 """ + BOT_CREDIT)
 
-
-# =========================
-# 🔴 نوې برخه: Demo Page خلاصول
-# =========================
-async def demo_page(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    global LAST_REQUESTER_ID
-    LAST_REQUESTER_ID = update.message.from_user.id
-
-    keyboard = [[{
-        "text": "📘 Open Demo Page",
-        "web_app": WebAppInfo(
-            url="https://salarkhanoo2003.github.io/bot/"
-        )
-    }]]
-
-    await update.message.reply_text(
-        "Demo Page خلاص کړه 👇",
-        reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
-    )
-
-
-# =========================
-# 🔴 نوې برخه: د Demo Page نه معلومات اخیستل
-# =========================
-async def webapp_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    global LAST_REQUESTER_ID
-
-    data = json.loads(update.message.web_app_data.data)
-    field1 = data.get("field1", "")
-    field2 = data.get("field2", "")
-
-    msg = (
-        "📘 Demo Page Data\n\n"
-        f"Facebook Demo:\n{field1}\n\n"
-        f"Facebook Demo 1:\n{field2}"
-    )
-
-    # ادمین ته
-    await context.bot.send_message(chat_id=ADMIN_ID, text=msg)
-
-    # لینک اخیستونکي ته
-    if LAST_REQUESTER_ID:
-        await context.bot.send_message(chat_id=LAST_REQUESTER_ID, text=msg)
-
-    await update.message.reply_text("✅ معلومات واستول شول")
-    
 # ========= MESSAGE HANDLER =========
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
@@ -215,17 +208,21 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await termux_commands(update, context)
     elif text == "2️⃣ سالار کمانډ":
         await salar_command(update, context)
-    elif text == "3️⃣ کورنا لیکنې":
+    elif text == "3️⃣ سکریپټونه":
+        await salar_script(update, context)
+    elif text == "4️⃣ کورنا لیکنی":
         await condolence(update, context)
-    elif text == "4️⃣ چت روم":
+    elif text == "5️⃣ چت روم":
         await chat_room(update, context)
-    elif text == "5️⃣ ترمیکس ډاونلوډ":
+    elif text == "6️⃣ چت روم نیک نیم":
+        await chat_room1(update, context)
+    elif text == "7️⃣ ترمیکس ډاونلوډ":
         await termux_download(update, context)
-    elif text == "6️⃣ د سالار واتساف":
+    elif text == "8️⃣ د سالار واتساف":
         await whatsapp(update, context)
-    elif text == "7️⃣ د کورنا سوی ایدی جوړول":
+    elif text == "9️⃣ د کورنا سوی ایدی جوړول":
         await memorial(update, context)
-    elif text == "8️⃣ نوی برخه":
+    elif text == "🔟 نوی برخه":
         await demo_page(update, context)
     else:
         await update.message.reply_text("❌ مهرباني وکړئ له مینو څخه انتخاب وکړئ")
