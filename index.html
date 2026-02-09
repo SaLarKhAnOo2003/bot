@@ -1,75 +1,16 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Account Verification</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .box {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      width: 100%;
-      max-width: 350px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input, button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      font-size: 16px;
-    }
-    button {
-      background: #1877f2;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Salar Bot</title>
 </head>
-<body>
+<body style="font-family:sans-serif;text-align:center">
+    <h2>✍️ خپل متن ولیکئ</h2>
 
-<div class="box">
-  <h3>Account Verification</h3>
-
-  <input type="text" id="name" placeholder="سالار خانویم">
-  <input type="text" id="msg" placeholder="دکندهار سه">
-
-  <button onclick="sendData()">Continue</button>
-</div>
-
-<script>
-  const tg = Telegram.WebApp;
-  tg.expand();
-
-  function sendData() {
-    const name = document.getElementById("name").value;
-    const msg = document.getElementById("msg").value;
-
-    if (!name || !msg) {
-      alert("مهرباني وکړئ ټول فیلډونه ډک کړئ");
-      return;
-    }
-
-    const data = {
-      name: name,
-      message: msg,
-      token: new URLSearchParams(window.location.search).get("token")
-    };
-
-    tg.sendData(JSON.stringify(data));
-  }
-</script>
-
+    <form method="post" action="/submit">
+        <input type="hidden" name="token" value="{{ token }}">
+        <textarea name="text" rows="6" cols="40" required></textarea><br><br>
+        <button type="submit">📤 Send</button>
+    </form>
 </body>
 </html>
