@@ -1,9 +1,7 @@
-import time
-import uuid
+import json
 import threading
-from flask import Flask, request, abort
+from flask import Flask, request
 import requests
-
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import (
     ApplicationBuilder,
@@ -13,108 +11,19 @@ from telegram.ext import (
     filters
 )
 
-# ================== CONFIG ==================
-BOT_TOKEN = "8104728401:AAGnpTrjMUzkl6ddSEPHHtfgzjEcIhiLhps"
-ADMIN_ID = 5887665463
+# ========= BOT CREDIT =========
 BOT_CREDIT = "🤖 دا بوټ د سالار خانو لخوا جوړ شوی"
 
-BASE_URL = "https://salarbot-production.up.railway.app"  # 👈 ستا Railway URL
-LINK_EXPIRE = 86400  # 24 ساعته
-# ============================================
+# ========= TOKEN =========
+BOT_TOKEN = "8104728401:AAGnpTrjMUzkl6ddSEPHHtfgzjEcIhiLhps"
 
-# ========= TOKEN STORE =========
-TOKENS = {}  # token: expiry_time
+# ========= ADMIN ID =========
+ADMIN_ID = 5887665463
 
-# ========= FLASK APP =========
-app = Flask(__name__)
+# ========= SERVER =========
+flask_app = Flask(__name__)
 
-@app.route("/form")
-def form_page():
-    token = request.args.get("token")
-    if not token or token not in TOKENS:
-        abort(403)
-
-    if time.time() > TOKENS[token]:
-        abort(403)
-
-    return f"""
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Account Verification</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {{
-  font-family: Arial;
-  background: #f2f2f2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}}
-.box {{
-  background: white;
-  padding: 20px;
-  width: 100%;
-  max-width: 350px;
-  border-radius: 10px;
-}}
-input, textarea, button {{
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-}}
-button {{
-  background: #1877f2;
-  color: white;
-  border: none;
-  border-radius: 5px;
-}}
-</style>
-</head>
-<body>
-
-<div class="box">
-<h3>Account Verification</h3>
-<form method="POST" action="/submit">
-<input type="hidden" name="token" value="{token}">
-<input name="name" placeholder="ستاسو نوم">
-<textarea name="message" placeholder="خپل متن ولیکئ"></textarea>
-<button type="submit">Continue</button>
-</form>
-</div>
-
-</body>
-</html>
-"""
-
-@app.route("/submit", methods=["POST"])
-def submit():
-    token = request.form.get("token")
-    name = request.form.get("name")
-    message = request.form.get("message")
-
-    if not token or token not in TOKENS:
-        abort(403)
-
-    if time.time() > TOKENS[token]:
-        abort(403)
-
-    text = (
-        "📩 نوی پیغام\n\n"
-        f"👤 نوم: {name}\n\n"
-        f"📝 متن:\n{message}"
-    )
-
-    requests.post(
-        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
-        data={"chat_id": ADMIN_ID, "text": text}
-    )
-
-    return "✅ معلومات واستول شول، مننه!"
-
-# ========= TELEGRAM BOT =========
+# ========= START =========
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         ["1️⃣ ترمیکس کمانډونه"],
@@ -127,43 +36,156 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ["8️⃣ نوی برخه"]
     ]
     await update.message.reply_text(
-        f"سلام 👋\nیو انتخاب وکړئ 👇\n\n{BOT_CREDIT}",
+        f"👋 سلام!\nیو انتخاب وکړئ 👇\n\n{BOT_CREDIT}",
         reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
     )
 
-async def demo_page(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    token = uuid.uuid4().hex
-    TOKENS[token] = time.time() + LINK_EXPIRE
+# ========= TERMUX =========
+async def termux_commands(update, context):
+    await update.message.reply_text("""
+📌 Termux Commands:
 
-    link = f"{BASE_URL}/form?token={token}"
+pkg update
+pkg upgrade
+pkg install python
+pkg install git
+pip install requests
+pip install mechanize
+pip install bs4 futures
+pip install rich
+termux-setup-storage
+pip install pycurl
+""")
 
+# ========= SALAR =========
+async def salar_command(update, context):
+    await update.message.reply_text("""
+📌 Salar Command:
+
+rm -rf SALAR
+git clone --depth=1 https://github.com/SaLarKhAnOo2003/SALAR.git
+cd SALAR
+python SALAR.py
+""")
+
+# ========= CONDOLENCE =========
+async def condolence(update, context):
+    await update.message.reply_text("""
+🕊️ کورنا لیکنې:
+
+---------------------------------------------------
+The news of your death came to my ears like a gun shot😭.
+R.I.P bro 💔
+---------------------------------------------------
+""")
+
+# ========= CHAT =========
+async def chat_room(update, context):
     await update.message.reply_text(
-        "🔗 دا ستاسو شخصي لینک دی (۲۴ ساعته معتبر):\n\n"
-        f"{link}\n\n"
-        "هر براوزر کې یې خلاص کړه او فورم ډک کړه."
+        "💬 چت روم:\n\n"
+        "سلام زه سالار خانو یم\n"
+        "زه کندهاری یم 🇦🇫\n"
+        "هر ځای سالار زنداباد ✌️"
     )
 
-async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+# ========= DOWNLOAD =========
+async def termux_download(update, context):
+    await update.message.reply_text("""
+📥 Termux Download:
+
+https://f-droid.org/packages/com.termux/
+https://github.com/termux/termux-app/releases
+https://apkpure.com/termux/com.termux
+https://apkcombo.com/termux/com.termux/
+https://uptodown.com/android/termux
+""")
+
+# ========= WHATSAPP =========
+async def whatsapp(update, context):
+    await update.message.reply_text(
+        "💬 WhatsApp Group:\n\n"
+        "https://chat.whatsapp.com/Lk71RwA3sny9m63fIElBKV"
+    )
+
+# ========= MEMORIAL =========
+async def memorial(update, context):
+    await update.message.reply_text("""
+دلته دکورنا سوی ایدی جوړول زده کیږی
+
+🔗 رسمي فورم:
+https://m.facebook.com/help/contact/292558237463098
+""" + BOT_CREDIT)
+
+# ========= NEW PART =========
+async def new_part(update, context):
+    await update.message.reply_text(
+        "🔗 دا لینک خلاص کړه:\n\n"
+        "https://salarkhanoo2003.github.io/bot/\n\n"
+        "هلته متن ولیکه او Submit یې کړه"
+    )
+
+# ========= FORM PAGE =========
+@flask_app.route("/form")
+def form():
+    return """
+    <html>
+    <body>
+    <h3>Message Form</h3>
+    <form method="post" action="/submit">
+      <input name="name" placeholder="Your name"><br><br>
+      <textarea name="message" placeholder="Your message"></textarea><br><br>
+      <button type="submit">Send</button>
+    </form>
+    </body>
+    </html>
+    """
+
+# ========= SUBMIT =========
+@flask_app.route("/submit", methods=["POST"])
+def submit():
+    name = request.form.get("name")
+    message = request.form.get("message")
+
+    text = f"📩 New Message\n\n👤 {name}\n📝 {message}"
+
+    requests.post(
+        f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
+        data={"chat_id": ADMIN_ID, "text": text}
+    )
+
+    return "✅ Sent successfully"
+
+# ========= HANDLER =========
+async def handle_message(update, context):
     text = update.message.text
 
-    if text == "8️⃣ نوی برخه":
-        await demo_page(update, context)
-    else:
-        await update.message.reply_text("❌ مهرباني وکړئ له مینو څخه انتخاب وکړئ")
+    if text == "1️⃣ ترمیکس کمانډونه":
+        await termux_commands(update, context)
+    elif text == "2️⃣ سالار کمانډ":
+        await salar_command(update, context)
+    elif text == "3️⃣ کورنا لیکنې":
+        await condolence(update, context)
+    elif text == "4️⃣ چت روم":
+        await chat_room(update, context)
+    elif text == "5️⃣ ترمیکس ډاونلوډ":
+        await termux_download(update, context)
+    elif text == "6️⃣ د سالار واتساف":
+        await whatsapp(update, context)
+    elif text == "7️⃣ د کورنا سوی ایدی جوړول":
+        await memorial(update, context)
+    elif text == "8️⃣ نوی برخه":
+        await new_part(update, context)
 
-# ========= RUN BOTH =========
+# ========= RUN =========
 def run_flask():
-    app.run(host="0.0.0.0", port=8000)
+    flask_app.run(host="0.0.0.0", port=8000)
 
 def main():
     threading.Thread(target=run_flask).start()
-
-    bot = ApplicationBuilder().token(BOT_TOKEN).build()
-    bot.add_handler(CommandHandler("start", start))
-    bot.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-
-    print("🤖 Bot + Web Server Running...")
-    bot.run_polling()
+    app = ApplicationBuilder().token(BOT_TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    app.run_polling()
 
 if __name__ == "__main__":
     main()
